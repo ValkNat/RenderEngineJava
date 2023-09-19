@@ -19,13 +19,30 @@ public class DemoViewer {
 		JSlider pitchSlider = new JSlider(SwingConstants.VERTICAL, -90,90,0);
 		pane.add(pitchSlider, BorderLayout.EAST);
 
+
 		//render results panel
 		JPanel renderPanel = new JPanel() {
 			public void paintComponent(Graphics g) {
-				Graphics2D g2 = (Graphics2D) g;
-				g2.setColor(Color.BLACK);
-				g2.fillRect(0,0,getWidth(), getHeight());
+				Graphics2D g2d = (Graphics2D) g;
+				g2d.setColor(Color.BLACK);
+				g2d.fillRect(0,0,getWidth(), getHeight());
 				super.paintComponent(g);
+
+				DemoViewer viewer = new DemoViewer();
+				Tetrahedron tetrahedron = viewer.new Tetrahedron();
+
+				for(int[] face : tetrahedron.faces) {
+					Vertex v1 = tetrahedron.vertices[face[0]];
+					Vertex v2 = tetrahedron.vertices[face[1]];
+					Vertex v3 = tetrahedron.vertices[face[2]];
+
+
+					//The complicated part (projecting 3D vertices to 2D coords)
+					Point p1 = viewer.projectVertex(v1);
+					Point p2 = viewer.projectVertex(v2);
+					Point p3 = viewer.projectVertex(v3);
+				}
+
 			}
 		};
 
@@ -34,6 +51,11 @@ public class DemoViewer {
 		frame.setVisible(true);
 
 	}
+
+					private Point projectVertex(Vertex vertex) {
+			return new Point(0, 0);
+		}
+
 
 //Vertex class for storing basic coordinates
 class Vertex {
@@ -45,6 +67,8 @@ class Vertex {
 		this.y = y;
 		this.z = z;
 	}
+
+}
 
 class Triangle {
 	//Stores all three points of triangle
@@ -75,9 +99,6 @@ class Tetrahedron {
 		{1, 2, 3},
 		{2, 0, 3}
 	};
-}
-
-
 }
 
 }
